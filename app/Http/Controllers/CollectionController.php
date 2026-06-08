@@ -13,7 +13,6 @@ class CollectionController extends Controller
     {
         $collections = auth()->user()
             ->collections()
-            ->withCount('prompts')
             ->latest()
             ->get();
 
@@ -43,35 +42,15 @@ class CollectionController extends Controller
 
     public function show(Collection $collection)
     {
-        $this->authorizeOwner($collection);
-
-        $collection->load('prompts.category');
+        $collection->load(['prompts.category', 'prompts.ratings']);
 
         return view('collections.show', compact('collection'));
     }
 
     public function addPrompt(Collection $collection, Prompt $prompt)
     {
-        $this->authorizeOwner($collection);
-
         $collection->prompts()->syncWithoutDetaching($prompt->id);
 
         return back()->with('success', 'Prompt added to collection.');
-    }
-
-    public function destroy(Collection $collection)
-    {
-        $this->authorizeOwner($collection);
-
-        $collection->delete();
-
-        return redirect()
-            ->route('collections.index')
-            ->with('success', 'Collection deleted.');
-    }
-
-    private function authorizeOwner(Collection $collection): void
-    {
-        abort_unless($collection->user_id === auth()->id(), 403);
     }
 }

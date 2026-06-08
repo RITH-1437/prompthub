@@ -36,20 +36,6 @@
         <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-violet-500/10 blur-3xl"></div>
     </div>
 
-    @if(session('success'))
-        <div class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-2xl flex items-center gap-2">
-            <i data-lucide="check-circle" class="w-5 h-5"></i>
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if($errors->any())
-        <div class="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-3 rounded-2xl flex items-center gap-2">
-            <i data-lucide="alert-circle" class="w-5 h-5"></i>
-            {{ $errors->first() }}
-        </div>
-    @endif
-
     <div class="grid grid-cols-1 xl:grid-cols-[1fr_20rem] gap-8">
         <div class="space-y-8">
             <div class="bg-slate-900/40 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8">

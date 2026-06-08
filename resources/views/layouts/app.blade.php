@@ -11,7 +11,6 @@
     <title>{{ $title ?? 'PromptHub' }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
 </head>
 
 <body class="bg-slate-950 text-white min-h-screen">
@@ -182,14 +181,6 @@
 
         </aside>
 
-        @if(session('achievement'))
-
-            <div class="bg-yellow-500 text-black px-4 py-3 rounded-xl mb-6">
-                {{ session('achievement') }}
-            </div>
-
-        @endif
-
         <main class="flex-1 p-8">
 
             @yield('content')
@@ -223,61 +214,67 @@
          data-last-msg="{{ $lastMsg ? e($lastMsg) : '' }}"
          data-conversations="{{ e($conversationsJson) }}">
         <button id="aiFabBtn" type="button"
-            class="w-14 h-14 bg-violet-500 hover:bg-violet-600 rounded-full flex items-center justify-center shadow-lg shadow-violet-500/30 transition-all duration-200 hover:scale-110">
-            <img src="{{ asset('images/bot.png') }}" alt="AI Assistant" class="w-8 h-8">
+            class="w-14 h-14 bg-gradient-to-br from-violet-500 to-fuchsia-600 hover:from-violet-400 hover:to-fuchsia-500 rounded-full flex items-center justify-center shadow-lg shadow-violet-500/40 transition-all duration-300 hover:scale-110 group relative">
+            <div class="absolute inset-0 rounded-full bg-white/20 animate-ping opacity-0 group-hover:opacity-100"></div>
+            <i data-lucide="bot" class="w-7 h-7 text-white relative z-10 group-hover:animate-bounce"></i>
         </button>
 
-        <div id="aiFabLoading" class="hidden bg-slate-800 rounded-xl px-4 py-3 shadow-lg flex items-center gap-3">
+        <div id="aiFabLoading" class="hidden bg-slate-900/90 backdrop-blur-md border border-slate-700/50 rounded-2xl px-5 py-3 shadow-xl flex items-center gap-3">
             <svg class="animate-spin h-5 w-5 text-violet-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
             </svg>
-            <span class="text-sm text-slate-300">Loading AI Assistant...</span>
+            <span class="text-sm font-medium text-slate-200">Initializing AI...</span>
         </div>
 
-        <div id="aiFabChat" class="hidden bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-2xl w-80 flex flex-col transition-all duration-300">
-            <div class="flex items-center justify-between bg-slate-800 px-4 py-3 border-b border-slate-700">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="sparkles" class="w-4 h-4 text-violet-500"></i>
-                    <span class="font-semibold text-sm">AI Assistant</span>
+        <div id="aiFabChat" class="hidden bg-slate-900/95 backdrop-blur-2xl border border-slate-700/50 rounded-2xl overflow-hidden shadow-[0_0_50px_-12px_rgba(139,92,246,0.25)] w-[22rem] sm:w-[24rem] flex flex-col transition-all duration-300 mb-2">
+            <div class="flex items-center justify-between bg-gradient-to-r from-slate-800 to-slate-800/80 px-5 py-4 border-b border-slate-700/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shadow-md shadow-violet-500/20">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-sm text-white block leading-tight">AI Assistant</span>
+                        <span class="text-[10px] text-violet-400 font-medium flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Online</span>
+                    </div>
                 </div>
-                <div class="flex items-center gap-1">
-                    <button id="historyFab" type="button" class="text-slate-400 hover:text-white transition p-1" title="History">
+                <div class="flex items-center gap-0.5">
+                    <button id="historyFab" type="button" class="text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition p-1.5" title="History">
                         <i data-lucide="clock" class="w-4 h-4"></i>
                     </button>
-                    <button id="clearChatFab" type="button" class="text-slate-400 hover:text-white transition p-1" title="Clear Chat">
+                    <button id="clearChatFab" type="button" class="text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition p-1.5" title="Clear Chat">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
-                    <button id="newChatFab" type="button" class="text-slate-400 hover:text-white transition p-1" title="New Chat">
+                    <button id="newChatFab" type="button" class="text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition p-1.5" title="New Chat">
                         <i data-lucide="plus" class="w-4 h-4"></i>
                     </button>
-                    <button id="maximizeAiFab" type="button" class="text-slate-400 hover:text-white transition p-1" title="Maximize">
+                    <button id="maximizeAiFab" type="button" class="text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition p-1.5" title="Maximize">
                         <i data-lucide="maximize-2" class="w-4 h-4"></i>
                     </button>
-                    <button id="closeAiFab" type="button" class="text-slate-400 hover:text-white transition p-1">
+                    <button id="closeAiFab" type="button" class="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition p-1.5" title="Close">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
             </div>
 
-            <div id="aiFabMessages" class="h-72 overflow-y-auto p-3 space-y-3 text-sm"></div>
+            <div id="aiFabMessages" class="h-[22rem] sm:h-96 overflow-y-auto p-4 space-y-4 text-sm scroll-smooth"></div>
 
-            <div id="aiFabHistory" class="hidden h-72 overflow-y-auto p-3 space-y-2 text-sm">
+            <div id="aiFabHistory" class="hidden h-[22rem] sm:h-96 overflow-y-auto p-4 space-y-2 text-sm">
                 <div class="flex items-center justify-between mb-3">
                     <span class="font-semibold text-slate-300">Conversations</span>
-                    <button id="closeHistoryFab" type="button" class="text-slate-400 hover:text-white transition p-1">
+                    <button id="closeHistoryFab" type="button" class="text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition p-1.5">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>
                 </div>
                 <div id="historyList" class="space-y-1"></div>
             </div>
 
-            <div class="border-t border-slate-700 p-3 flex gap-2">
+            <div class="border-t border-slate-700/50 p-3 bg-slate-800/30 flex gap-2">
                 <input id="aiFabInput" type="text" placeholder="Ask me anything..."
-                    class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-500">
+                    class="flex-1 bg-slate-900/50 border border-slate-600/50 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all shadow-inner">
                 <button id="aiFabSend" type="button"
-                    class="bg-violet-500 hover:bg-violet-600 px-4 py-2 rounded-lg text-sm font-semibold transition">
-                    Send
+                    class="bg-violet-600 hover:bg-violet-500 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/20 transition-all hover:scale-105 group shrink-0">
+                    <i data-lucide="send" class="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform"></i>
                 </button>
             </div>
         </div>
@@ -467,9 +464,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function toggleMaximize() {
         isMaximized = !isMaximized;
         if (isMaximized) {
-            chatContainer.classList.remove('w-80');
+            chatContainer.classList.remove('w-[22rem]', 'sm:w-[24rem]');
             chatContainer.classList.add('fixed', 'top-0', 'right-0', 'bottom-0', 'left-64', 'w-auto', 'h-auto', 'rounded-none');
-            chatMessages.classList.remove('h-72');
+            chatMessages.classList.remove('h-[22rem]', 'sm:h-96');
             chatMessages.classList.add('flex-1', 'min-h-0');
             chatContainer.querySelectorAll('[class*="max-w-xs"]').forEach(function (el) {
                 el.classList.remove('max-w-xs');
@@ -478,9 +475,9 @@ document.addEventListener('DOMContentLoaded', function () {
             maximizeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 14 4 20 10 20"/><polyline points="20 10 20 4 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
         } else {
             chatContainer.classList.remove('fixed', 'top-0', 'right-0', 'bottom-0', 'left-64', 'w-auto', 'h-auto', 'rounded-none');
-            chatContainer.classList.add('w-80');
+            chatContainer.classList.add('w-[22rem]', 'sm:w-[24rem]');
             chatMessages.classList.remove('flex-1', 'min-h-0');
-            chatMessages.classList.add('h-72');
+            chatMessages.classList.add('h-[22rem]', 'sm:h-96');
             chatContainer.querySelectorAll('[class*="max-w-full"]').forEach(function (el) {
                 el.classList.remove('max-w-full');
                 el.classList.add('max-w-xs');
@@ -504,8 +501,8 @@ document.addEventListener('DOMContentLoaded', function () {
         chatSend.disabled = true;
 
         var loadingMsg = document.createElement('div');
-        loadingMsg.className = 'flex items-center gap-2 text-slate-500 py-2';
-        loadingMsg.innerHTML = '<div class="animate-pulse flex gap-1"><div class="w-2 h-2 bg-violet-500 rounded-full"></div><div class="w-2 h-2 bg-violet-500 rounded-full animation-delay-200"></div><div class="w-2 h-2 bg-violet-500 rounded-full animation-delay-400"></div></div>';
+        loadingMsg.className = 'flex items-center gap-2 py-2';
+        loadingMsg.innerHTML = '<div class="bg-slate-800/80 border border-slate-700/50 px-4 py-3 rounded-2xl rounded-tl-sm shadow-sm"><div class="flex gap-1.5 items-center h-4"><div class="w-2 h-2 bg-violet-400/80 rounded-full animate-bounce"></div><div class="w-2 h-2 bg-violet-400/80 rounded-full animate-bounce" style="animation-delay: 0.15s"></div><div class="w-2 h-2 bg-violet-400/80 rounded-full animate-bounce" style="animation-delay: 0.3s"></div></div></div>';
         loadingMsg.id = 'aiFabLoadingMsg';
         chatMessages.appendChild(loadingMsg);
         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -547,8 +544,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var sizeClass = isMaximized ? 'max-w-full' : 'max-w-xs';
         var bubble = document.createElement('div');
         bubble.className = role === 'user'
-            ? 'bg-violet-600 text-white px-3 py-2 rounded-xl ' + sizeClass + ' [&_pre]:bg-violet-700'
-            : 'bg-slate-800 text-slate-200 px-3 py-2 rounded-xl ' + sizeClass;
+            ? 'bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white px-4 py-2.5 rounded-2xl rounded-tr-sm shadow-md ' + sizeClass + ' [&_pre]:bg-violet-700/50'
+            : 'bg-slate-800/80 border border-slate-700/50 text-slate-200 px-4 py-2.5 rounded-2xl rounded-tl-sm shadow-sm ' + sizeClass;
 
         if (role === 'assistant') {
             bubble.innerHTML = renderMd(content);

@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/dashboard');
+        return redirect('/');
     }
 
     public function login(Request $request)
@@ -39,7 +39,7 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect('/dashboard');
+            return redirect('/');
         }
 
         return back()->withErrors([

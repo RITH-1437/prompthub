@@ -1,5 +1,1 @@
-<x-layouts.app>
-
-    {{ $slot }}
-
-</x-layouts.app>
+{{-- Deprecated: Unused layout. Application uses layouts.app directly --}}

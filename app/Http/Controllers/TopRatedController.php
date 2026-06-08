@@ -13,6 +13,7 @@ class TopRatedController extends Controller
             'comments',
             'ratings',
         ])
+            ->with(['user', 'category'])
             ->withAvg('ratings', 'rating')
             ->orderByDesc('ratings_avg_rating')
             ->paginate(12);

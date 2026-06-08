@@ -77,16 +77,14 @@ class PromptController extends Controller
             AchievementService::unlock($user, 'Prompt Master');
         }
 
-        $tags = explode(',', $request->tags);
-
-        foreach ($tags as $tagName) {
-
-            $tag = Tag::firstOrCreate([
-                'name' => trim($tagName),
-            ]);
-
-            $prompt->tags()->attach($tag->id);
-
+        if ($request->filled('tags')) {
+            $tagIds = [];
+            $tags = array_filter(array_map('trim', explode(',', $request->tags)));
+            foreach ($tags as $tagName) {
+                $tag = Tag::firstOrCreate(['name' => $tagName], ['slug' => Str::slug($tagName)]);
+                $tagIds[] = $tag->id;
+            }
+            $prompt->tags()->sync($tagIds);
         }
 
         return redirect('/prompts')
@@ -113,6 +111,16 @@ class PromptController extends Controller
             'prompt_content' => $request->content,
             'category_id' => $request->category_id,
         ]);
+
+        if ($request->has('tags')) {
+            $tagIds = [];
+            $tags = array_filter(array_map('trim', explode(',', $request->tags)));
+            foreach ($tags as $tagName) {
+                $tag = Tag::firstOrCreate(['name' => $tagName], ['slug' => Str::slug($tagName)]);
+                $tagIds[] = $tag->id;
+            }
+            $prompt->tags()->sync($tagIds);
+        }
 
         return redirect('/prompts')
             ->with('success', 'Prompt updated successfully.');
@@ -180,14 +188,9 @@ class PromptController extends Controller
     {
         $prompt->increment('copy_count');
 
-        return response()->json([
-            'success' => true,
-            'new_count' => $prompt->fresh()->copy_count,
-        ]);
-
         $user = $prompt->user;
 
-        $totalCopies = $user->prompts()->sum('views_count');
+        $totalCopies = $user->prompts()->sum('copy_count');
 
         if ($totalCopies >= 100) {
             AchievementService::unlock(
@@ -195,5 +198,10 @@ class PromptController extends Controller
                 'Copy King'
             );
         }
+
+        return response()->json([
+            'success' => true,
+            'new_count' => $prompt->copy_count,
+        ]);
     }
 }

@@ -37,7 +37,7 @@ class AdminController extends Controller
         $topViewedPrompts = Prompt::orderByDesc('views_count')->take(5)->get();
 
         // 7. Top Creators Leaderboard
-        $topCreators = User::with('prompts')
+        $topCreators = User::with(['prompts' => function($q) { $q->withCount('favorites'); }])
             ->get()
             ->map(function ($user) {
                 $views = $user->prompts->sum('views_count');
@@ -45,8 +45,7 @@ class AdminController extends Controller
                 
                 $user->prompts_count = $user->prompts->count();
                 $user->views_total = $views;
-                // Calculating nested relation aggregates (simulated for dashboard speed)
-                $user->likes_total = $user->prompts->sum(function($p) { return $p->favorites()->count(); });
+                $user->likes_total = $user->prompts->sum('favorites_count');
                 $user->score = $views + $copies;
                 
                 return $user;

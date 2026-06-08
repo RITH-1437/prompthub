@@ -1,104 +1,86 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="max-w-3xl mx-auto space-y-8 pb-12 font-sans">
 
-<div class="w-full">
-
-    <h1 class="text-4xl font-bold mb-6">
-        Edit Prompt
-    </h1>
-
-    <form
-        action="{{ route('prompts.update', $prompt) }}"
-        method="POST"
-        class="space-y-6"
-    >
-
-        @csrf
-        @method('PUT')
-
-        <div>
-
-            <label class="block mb-2">
-                Title
-            </label>
-
-            <input
-                type="text"
-                name="title"
-                value="{{ old('title', $prompt->title) }}"
-                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3"
-            >
-            @error('title') <p class="text-red-500 text-xs mt-2">{{ $message }}</p> @enderror
-
+    <!-- Header Section -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 p-8 border border-slate-700/50 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex items-center gap-5 relative z-10">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <i data-lucide="edit-3" class="w-8 h-8 text-white"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-extrabold text-white tracking-tight mb-1">
+                    Edit Prompt
+                </h1>
+                <p class="text-slate-400 text-sm">Update your prompt details and refine your content.</p>
+            </div>
         </div>
+        
+        <a href="/prompts/{{ $prompt->id }}" class="relative z-10 bg-slate-800 hover:bg-slate-700 text-white font-semibold px-5 py-2.5 rounded-xl border border-slate-600 transition-colors flex items-center gap-2 shadow-lg shadow-black/20">
+            <i data-lucide="arrow-left" class="w-4 h-4 text-slate-400"></i> Back to Prompt
+        </a>
 
-        <div>
+        <!-- Decorative glows -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-blue-500/10 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-cyan-500/10 blur-3xl"></div>
+    </div>
 
-            <label class="block mb-2">
-                Category
-            </label>
+    <!-- Form Section -->
+    <div class="bg-slate-900/40 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-2xl">
+        <form action="/prompts/{{ $prompt->id }}" method="POST" class="space-y-6">
+            @csrf
+            @method('PUT')
 
-            <select
-                name="category_id"
-                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3"
-            >
+            <div>
+                <label class="block mb-2 text-sm font-medium text-slate-300 flex items-center gap-2">
+                    <i data-lucide="type" class="w-4 h-4 text-blue-400"></i> Title
+                </label>
+                <input type="text" name="title" value="{{ old('title', $prompt->title) }}" required placeholder="e.g. Laravel Expert Developer..."
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
 
-                @foreach($categories as $category)
+            <div>
+                <label class="block mb-2 text-sm font-medium text-slate-300 flex items-center gap-2">
+                    <i data-lucide="folder" class="w-4 h-4 text-blue-400"></i> Category
+                </label>
+                <select name="category_id" required
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors appearance-none">
+                    <option value="" disabled>Select a category...</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ (old('category_id', $prompt->category_id) == $category->id) ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
 
-                    <option
-                        value="{{ $category->id }}"
-                        {{ old('category_id', $prompt->category_id) == $category->id ? 'selected' : '' }}
-                    >
-                        {{ $category->name }}
-                    </option>
+            <div>
+                <label class="block mb-2 text-sm font-medium text-slate-300 flex items-center gap-2">
+                    <i data-lucide="align-left" class="w-4 h-4 text-blue-400"></i> Content
+                </label>
+                <textarea name="content" rows="10" required placeholder="Write your prompt here..."
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors">{{ old('content', $prompt->prompt_content) }}</textarea>
+                @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
 
-                @endforeach
+            <div>
+                <label class="block mb-2 text-sm font-medium text-slate-300 flex items-center gap-2">
+                    <i data-lucide="hash" class="w-4 h-4 text-blue-400"></i> Tags
+                </label>
+                <input type="text" name="tags" value="{{ old('tags', $prompt->tags->pluck('name')->implode(', ')) }}" placeholder="ai, coding, laravel"
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                <p class="text-slate-500 text-xs mt-2">Separate tags with commas.</p>
+            </div>
 
-            </select>
-
-        </div>
-
-        <div>
-
-            <label class="block mb-2">
-                Content
-            </label>
-
-            <textarea
-                name="content"
-                rows="10"
-                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3"
-            >{{ old('content', $prompt->prompt_content) }}</textarea>
-            @error('content') <p class="text-red-500 text-xs mt-2">{{ $message }}</p> @enderror
-
-        </div>
-
-        <div>
-
-            <label class="block mb-2">
-                Tags
-            </label>
-
-            <input
-                type="text"
-                name="tags"
-                value="{{ old('tags', $prompt->tags->pluck('name')->implode(', ')) }}"
-                placeholder="ai, image, coding"
-                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3"
-            >
-
-            <p class="text-slate-500 text-sm mt-2">
-                Separate tags with commas.
-            </p>
-        </div>
-
-        <button class="bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg font-semibold">
-            Update Prompt
-        </button>
-
-    </form>
-
+            <div class="flex justify-end pt-4">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20 border border-blue-500/50 hover:scale-105">
+                    <i data-lucide="save" class="w-5 h-5"></i> Update Prompt
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
-
 @endsection

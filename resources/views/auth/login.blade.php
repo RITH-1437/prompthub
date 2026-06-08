@@ -26,13 +26,6 @@
             <form class="space-y-6" action="{{ route('login.submit') }}" method="POST">
                 @csrf
 
-                @if($errors->any())
-                    <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl text-sm flex items-start gap-2">
-                        <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
-                        <span>{{ $errors->first() }}</span>
-                    </div>
-                @endif
-
                 <div>
                     <label for="email" class="block text-sm font-medium text-slate-300 mb-2">
                         Email address

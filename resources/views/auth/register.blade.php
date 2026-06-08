@@ -26,17 +26,6 @@
             <form class="space-y-6" action="/register" method="POST">
                 @csrf
 
-                @if($errors->any())
-                    <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl text-sm flex items-start gap-3">
-                        <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
-                        <ul class="list-disc pl-4 space-y-1">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
                 <div>
                     <label for="name" class="block text-sm font-medium text-slate-300 mb-2">
                         Full Name

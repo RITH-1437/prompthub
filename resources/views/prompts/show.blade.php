@@ -2,9 +2,6 @@
 
 @section('content')
 
-    {{-- Replaced manual HTML with your new reusable toast component --}}
-    <x-toast />
-
     <div class="w-full">
         <div class="mb-6">
 

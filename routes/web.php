@@ -21,7 +21,6 @@ use App\Http\Controllers\TopRatedController;
 use App\Http\Controllers\TrendingController;
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
-// use App\Models\Conversation;
 
 /*
 |--------------------------------------------------------------------------
@@ -222,9 +221,10 @@ Route::middleware('auth')->group(function () {
     );
 
     /*
-
+    |--------------------------------------------------------------------------
+    | AI Generator & Chat
+    |--------------------------------------------------------------------------
     */
-
     Route::get('/ai-generator', [AiPromptController::class, 'index']);
 
     Route::post('/ai-generator', [AiPromptController::class, 'generate']);

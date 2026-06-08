@@ -42,6 +42,7 @@ class FavoriteController extends Controller
     public function index()
     {
         $favorites = Favorite::where('user_id', auth()->id())
+            ->with(['prompt.category', 'prompt.user'])
             ->latest()
             ->get();
 

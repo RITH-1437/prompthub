@@ -8,7 +8,7 @@ class AdminPromptController extends Controller
 {
     public function index()
     {
-        $prompts = Prompt::with('user')->latest()->get();
+        $prompts = Prompt::with('user')->latest()->paginate(15);
 
         return view('admin.prompts.index', compact('prompts'));
     }
