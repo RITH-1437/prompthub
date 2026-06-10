@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/v13.7.0...13.x)
+## [Unreleased](https://github.com/laravel/laravel/compare/v1.1-refactored...main)
+
+## [v1.1-refactored](https://github.com/laravel/laravel/compare/v13.7.0...v1.1-refactored) - 2026-06-08
+
+https://prompthub-free.duckdns.org
+
+**Full Changelog**: https://github.com/RITH-1437/prompthub/commits/v1.1-refactored
 
 ## [v13.7.0](https://github.com/laravel/laravel/compare/v13.6.0...v13.7.0) - 2026-05-14
 
