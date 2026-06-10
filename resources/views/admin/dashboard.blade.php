@@ -8,9 +8,7 @@
         <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-5">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
-                    <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
-                </div>
+                <img src="{{ asset('images/logo.png') }}" alt="PromptHub Logo" class="w-16 h-16 rounded-2xl shadow-lg shadow-violet-500/30">
                 <div>
                     <h1 class="text-3xl font-extrabold text-white tracking-tight mb-1">
                         Welcome back, {{ auth()->user()->name }}

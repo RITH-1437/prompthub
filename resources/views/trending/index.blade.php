@@ -6,10 +6,8 @@
     <!-- Header Section -->
     <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 p-8 border border-slate-700/50 shadow-2xl flex flex-col items-center justify-center text-center gap-6">
         <div class="relative z-10 flex flex-col items-center gap-4">
-            <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-orange-500 to-rose-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
-                <i data-lucide="flame" class="w-10 h-10 text-white"></i>
-            </div>
-            <div>
+<img src="{{ asset('images/logo.png') }}" alt="PromptHub Logo" class="w-20 h-20 rounded-3xl shadow-lg shadow-orange-500/30">
+                <div>
                 <h1 class="text-4xl font-extrabold text-white tracking-tight mb-2">
                     Trending Prompts
                 </h1>

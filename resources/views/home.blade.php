@@ -159,8 +159,8 @@
     <!-- Footer -->
     <footer class="border-t border-slate-800/50 bg-slate-950 py-12 mt-auto">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-2 text-slate-400">
-                <i data-lucide="sparkles" class="w-5 h-5 text-blue-500"></i>
+<div class="flex items-center gap-2 text-slate-400">
+                <img src="{{ asset('images/logo.png') }}" alt="PromptHub Logo" class="w-5 h-5">
                 <span class="font-semibold text-white">PromptHub</span> &copy; {{ date('Y') }}. All rights reserved.
             </div>
             <div class="flex items-center gap-6 text-sm text-slate-500">

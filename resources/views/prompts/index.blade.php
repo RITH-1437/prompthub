@@ -6,9 +6,7 @@
     <!-- Header Section -->
     <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 p-8 border border-slate-700/50 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="flex items-center gap-5 relative z-10">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-                <i data-lucide="folder-open" class="w-8 h-8 text-white"></i>
-            </div>
+            <img src="{{ asset('images/logo.png') }}" alt="PromptHub Logo" class="w-16 h-16 rounded-2xl shadow-lg shadow-blue-500/30">
             <div>
                 <h1 class="text-3xl font-extrabold text-white tracking-tight mb-1">
                     My Prompts

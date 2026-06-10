@@ -6,10 +6,8 @@
     <!-- Header Section -->
     <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 p-8 border border-slate-700/50 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="flex items-center gap-5 relative z-10">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center shadow-lg shadow-rose-500/30 shrink-0">
-                <i data-lucide="bell" class="w-8 h-8 text-white"></i>
-            </div>
-            <div>
+<img src="{{ asset('images/logo.png') }}" alt="PromptHub Logo" class="w-16 h-16 rounded-2xl shadow-lg shadow-rose-500/30 shrink-0">
+                <div>
                 <h1 class="text-3xl font-extrabold text-white tracking-tight mb-1">
                     Notifications
                 </h1>
