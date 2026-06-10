@@ -5,9 +5,7 @@
     
     <!-- Login Header -->
     <div class="w-full sm:mx-auto sm:max-w-md text-center mb-8 relative z-20">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 shadow-lg shadow-blue-500/30 mb-4">
-            <i data-lucide="zap" class="w-8 h-8 text-white"></i>
-        </div>
+        <img src="{{ asset('images/logo.png') }}" alt="PromptHub Logo" class="w-16 h-16 rounded-2xl shadow-lg shadow-blue-500/30 mb-4">
         <h2 class="text-3xl font-extrabold text-white tracking-tight">
             Welcome Back
         </h2>

@@ -14,9 +14,7 @@
             
             <!-- Logo -->
             <a href="/" class="flex items-center gap-2.5 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                    <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
-                </div>
+                <img src="{{ asset('images/logo.png') }}" alt="PromptHub Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
                 <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-500">PromptHub</span>
             </a>
 

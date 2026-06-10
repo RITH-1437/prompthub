@@ -9,6 +9,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ $title ?? 'PromptHub' }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}?v=1">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}?v=1">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -24,6 +26,7 @@
                 <a href="/"
                     class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition duration-200">
 
+                    <img src="{{ asset('images/logo.png') }}" alt="PromptHub Logo" class="w-8 h-8 rounded-md shadow-sm">
                     <h1 class="text-2xl font-bold text-blue-500">
                         PromptHub
                     </h1>
