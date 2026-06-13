@@ -386,7 +386,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Refresh lucide icons
-    if(window.lucide) { lucide.createIcons(); }
+    if(window.lucide) { window.lucide.createIcons({ icons: window.lucide.icons }); }
 });
 </script>
 @endsection

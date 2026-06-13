@@ -283,11 +283,7 @@
         </div>
     </div>
 
-<script src="https://unpkg.com/lucide@latest"></script>
 
-<script>
-    lucide.createIcons();
-</script>
 
 @push('scripts')
 <script>
@@ -319,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(function () {
             loading.classList.add('hidden');
             chatContainer.classList.remove('hidden');
-            if (window.lucide) window.lucide.createIcons();
+            if (window.lucide) window.lucide.createIcons({ icons: window.lucide.icons });
             if (lastMsg) {
                 addMessage('assistant', lastMsg);
             } else {
@@ -333,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chatMessages.innerHTML = '';
         conversationId = null;
         addMessage('assistant', 'Chat cleared. Start a new conversation!');
-        if (window.lucide) window.lucide.createIcons();
+        if (window.lucide) window.lucide.createIcons({ icons: window.lucide.icons });
     });
 
     newChatBtn.addEventListener('click', function () {
@@ -341,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chatMessages.innerHTML = '';
         conversationId = null;
         addMessage('assistant', 'Hi! How can I help you?');
-        if (window.lucide) window.lucide.createIcons();
+        if (window.lucide) window.lucide.createIcons({ icons: window.lucide.icons });
     });
 
     closeBtn.addEventListener('click', function () {
@@ -350,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fabBtn.classList.remove('hidden');
         chatMessages.innerHTML = '';
         conversationId = null;
-        if (window.lucide) window.lucide.createIcons();
+        if (window.lucide) window.lucide.createIcons({ icons: window.lucide.icons });
     });
 
     historyBtn.addEventListener('click', function () {
@@ -390,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         historyList.appendChild(row);
                     });
                 }
-                if (window.lucide) window.lucide.createIcons();
+                if (window.lucide) window.lucide.createIcons({ icons: window.lucide.icons });
             });
     });
 
