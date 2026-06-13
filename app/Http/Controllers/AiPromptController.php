@@ -22,41 +22,50 @@ class AiPromptController extends Controller
             'timeout' => 120,
         ]);
 
-        $response = $client->post(
-            'https://openrouter.ai/api/v1/chat/completions',
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
-                    'Content-Type'  => 'application/json',
-                    'HTTP-Referer'  => config('app.url'),
-                    'X-Title'       => 'PromptHub',
-                ],
+        $models = ['google/gemini-2.5-flash-lite', 'openrouter/free'];
 
-                'json' => [
-                    'model' => 'google/gemini-2.5-flash-lite',
-
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => 'You are an expert AI prompt engineer.'
+        foreach ($models as $model) {
+            try {
+                $response = $client->post(
+                    'https://openrouter.ai/api/v1/chat/completions',
+                    [
+                        'headers' => [
+                            'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
+                            'Content-Type'  => 'application/json',
+                            'HTTP-Referer'  => config('app.url'),
+                            'X-Title'       => 'PromptHub',
                         ],
-                        [
-                            'role' => 'user',
-                            'content' => $request->description
+
+                        'json' => [
+                            'model' => $model,
+
+                            'messages' => [
+                                [
+                                    'role' => 'system',
+                                    'content' => 'You are an expert AI prompt engineer.'
+                                ],
+                                [
+                                    'role' => 'user',
+                                    'content' => $request->description
+                                ]
+                            ]
                         ]
                     ]
-                ]
-            ]
-        );
+                );
 
-        $data = json_decode(
-            $response->getBody()->getContents(),
-            true
-        );
+                $data = json_decode(
+                    $response->getBody()->getContents(),
+                    true
+                );
 
-        $generated =
-            $data['choices'][0]['message']['content']
-            ?? 'No response generated.';
+                $generated =
+                    $data['choices'][0]['message']['content']
+                    ?? 'No response generated.';
+                break;
+            } catch (\Exception $e) {
+                $generated = 'No response generated.';
+            }
+        }
 
         return back()->with(
             'generated',
@@ -107,28 +116,37 @@ class AiPromptController extends Controller
             ];
         }
 
-        $response = $client->post(
-            'https://openrouter.ai/api/v1/chat/completions',
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
-                    'Content-Type'  => 'application/json',
-                    'HTTP-Referer'  => config('app.url'),
-                    'X-Title'       => 'PromptHub',
-                ],
-                'json' => [
-                    'model' => 'google/gemini-2.5-flash-lite',
-                    'messages' => $messages,
-                ]
-            ]
-        );
+        $models = ['google/gemini-2.5-flash-lite', 'openrouter/free'];
 
-        $data = json_decode(
-            $response->getBody()->getContents(),
-            true
-        );
+        foreach ($models as $model) {
+            try {
+                $response = $client->post(
+                    'https://openrouter.ai/api/v1/chat/completions',
+                    [
+                        'headers' => [
+                            'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
+                            'Content-Type'  => 'application/json',
+                            'HTTP-Referer'  => config('app.url'),
+                            'X-Title'       => 'PromptHub',
+                        ],
+                        'json' => [
+                            'model' => $model,
+                            'messages' => $messages,
+                        ]
+                    ]
+                );
 
-        $reply = $data['choices'][0]['message']['content'] ?? 'No response generated.';
+                $data = json_decode(
+                    $response->getBody()->getContents(),
+                    true
+                );
+
+                $reply = $data['choices'][0]['message']['content'] ?? 'No response generated.';
+                break;
+            } catch (\Exception $e) {
+                $reply = 'No response generated.';
+            }
+        }
 
         return response()->json([
             'response' => $reply,

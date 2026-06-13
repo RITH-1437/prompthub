@@ -70,44 +70,52 @@ class ChatController extends Controller
 
         $client = new \GuzzleHttp\Client(['timeout' => 120]);
 
-        $response = $client->post(
-            'https://openrouter.ai/api/v1/chat/completions',
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
-                    'Content-Type' => 'application/json',
-                    'HTTP-Referer' => config('app.url'),
-                    'X-Title' => 'PromptHub',
-                ],
-                'json' => [
-                    'model' => 'google/gemini-2.5-flash-lite',
+        $models = ['google/gemini-2.5-flash-lite', 'openrouter/free'];
 
-                    'messages' => array_merge(
-                        [
-                            [
-                                'role' => 'system',
-                                'content' => 'You are a helpful AI assistant.'
-                            ]
+        foreach ($models as $model) {
+            try {
+                $response = $client->post(
+                    'https://openrouter.ai/api/v1/chat/completions',
+                    [
+                        'headers' => [
+                            'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
+                            'Content-Type' => 'application/json',
+                            'HTTP-Referer' => config('app.url'),
+                            'X-Title' => 'PromptHub',
                         ],
+                        'json' => [
+                            'model' => $model,
 
-                        $conversation->messages()
-                            ->orderBy('id')
-                            ->get()
-                            ->map(function ($message) {
-                                return [
-                                    'role' => $message->role,
-                                    'content' => $message->content
-                                ];
-                            })
-                            ->toArray()
-                    )
-                ]
-            ]
-        );
+                            'messages' => array_merge(
+                                [
+                                    [
+                                        'role' => 'system',
+                                        'content' => 'You are a helpful AI assistant.'
+                                    ]
+                                ],
 
-        $data = json_decode($response->getBody()->getContents(), true);
+                                $conversation->messages()
+                                    ->orderBy('id')
+                                    ->get()
+                                    ->map(function ($message) {
+                                        return [
+                                            'role' => $message->role,
+                                            'content' => $message->content
+                                        ];
+                                    })
+                                    ->toArray()
+                            )
+                        ]
+                    ]
+                );
 
-        $reply = $data['choices'][0]['message']['content'] ?? 'No response';
+                $data = json_decode($response->getBody()->getContents(), true);
+                $reply = $data['choices'][0]['message']['content'] ?? 'No response';
+                break;
+            } catch (\Exception $e) {
+                $reply = 'No response';
+            }
+        }
 
         $conversation->messages()->create([
             'role' => 'assistant',
