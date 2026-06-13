@@ -8,8 +8,65 @@
 </head>
 <body class="bg-slate-950 text-slate-200 font-sans antialiased selection:bg-blue-500/30 selection:text-white">
 
+    <!-- Mobile Hamburger Button -->
+    <button id="mobileMenuBtn" type="button" class="fixed top-5 right-4 z-50 sm:hidden p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 hover:text-white transition-colors">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobileMenuDrawer" class="fixed inset-0 z-40 hidden sm:hidden">
+        <div id="mobileMenuBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-72 bg-slate-900 border-l border-slate-800 p-6 pt-20 shadow-2xl overflow-y-auto">
+            <div class="space-y-1">
+                <a href="/explore" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="compass" class="w-5 h-5 text-slate-400"></i>
+                    Explore
+                </a>
+                <a href="/leaderboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="award" class="w-5 h-5 text-slate-400"></i>
+                    Leaderboard
+                </a>
+                <a href="/trending" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="flame" class="w-5 h-5 text-slate-400"></i>
+                    Trending
+                </a>
+                <a href="/top-rated" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i data-lucide="star" class="w-5 h-5 text-slate-400"></i>
+                    Top Rated
+                </a>
+                <hr class="border-slate-800 my-3">
+                @auth
+                    <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i data-lucide="home" class="w-5 h-5 text-slate-400"></i>
+                        Dashboard
+                    </a>
+                    <a href="/profile" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i data-lucide="user" class="w-5 h-5 text-slate-400"></i>
+                        Profile
+                    </a>
+                    <form action="/logout" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors">
+                            <i data-lucide="log-out" class="w-5 h-5"></i>
+                            Log out
+                        </button>
+                    </form>
+                @else
+                    <a href="/login" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
+                        <i data-lucide="log-in" class="w-5 h-5 text-slate-400"></i>
+                        Log in
+                    </a>
+                    <a href="/register" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white bg-blue-600 hover:bg-blue-500 transition-colors mt-2">
+                        <i data-lucide="user-plus" class="w-5 h-5"></i>
+                        Sign up
+                    </a>
+                @endauth
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation Bar -->
-    <nav class="fixed w-full z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50">
+    <nav class="fixed w-full z-30 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             
             <!-- Logo -->
@@ -28,7 +85,7 @@
                 @auth
                     <!-- Authenticated User Menu -->
                     <a href="/dashboard" class="text-sm font-medium text-slate-300 hover:text-white transition-colors hidden sm:block">Dashboard</a>
-                    <a href="/profile" class="flex items-center gap-2.5 text-sm font-medium text-white bg-slate-800/50 hover:bg-slate-700 px-4 py-2 rounded-xl transition-colors border border-slate-700">
+                    <a href="/profile" class="flex items-center gap-2.5 text-sm font-medium text-white bg-slate-800/50 hover:bg-slate-700 px-4 py-2 rounded-xl transition-colors border border-slate-700 hidden sm:flex">
                         <div class="w-7 h-7 rounded-full bg-slate-800 overflow-hidden flex items-center justify-center border border-slate-600">
                             @if(auth()->user()->avatar)
                                 <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover">
@@ -40,7 +97,7 @@
                     </a>
                     
                     <!-- Logout Form -->
-                    <form action="/logout" method="POST" class="m-0">
+                    <form action="/logout" method="POST" class="m-0 hidden sm:block">
                         @csrf
                         <button type="submit" class="text-slate-400 hover:text-rose-400 p-2 rounded-lg hover:bg-rose-500/10 transition-colors" title="Log out">
                             <i data-lucide="log-out" class="w-5 h-5"></i>
@@ -48,8 +105,8 @@
                     </form>
                 @else
                     <!-- Guest Menu -->
-                    <a href="/login" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Log in</a>
-                    <a href="/register" class="text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-500/20 hover:scale-105 border border-blue-500/50">Sign up</a>
+                    <a href="/login" class="text-sm font-medium text-slate-300 hover:text-white transition-colors hidden sm:block">Log in</a>
+                    <a href="/register" class="text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-blue-500/20 hover:scale-105 border border-blue-500/50 hidden sm:block">Sign up</a>
                 @endauth
             </div>
         </div>
@@ -175,5 +232,34 @@
 
 
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var menuBtn = document.getElementById('mobileMenuBtn');
+    var drawer = document.getElementById('mobileMenuDrawer');
+    var backdrop = document.getElementById('mobileMenuBackdrop');
+
+    if (menuBtn && drawer) {
+        menuBtn.addEventListener('click', function () {
+            drawer.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            if (window.lucide) window.lucide.createIcons({ icons: window.lucide.icons });
+        });
+
+        if (backdrop) {
+            backdrop.addEventListener('click', function () {
+                drawer.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+        }
+
+        drawer.querySelectorAll('a, button[type="submit"]').forEach(function (el) {
+            el.addEventListener('click', function () {
+                drawer.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+        });
+    }
+});
+</script>
 </body>
 </html>

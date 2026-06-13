@@ -17,12 +17,25 @@
 
 <body class="bg-slate-950 text-white min-h-screen">
 
-    <div class="flex min-h-screen">
+    <div class="min-h-screen lg:flex">
 
-        <aside class="w-64 bg-slate-900 border-r border-slate-800 p-6 sticky top-0 h-screen overflow-y-auto">
+        <!-- Backdrop for mobile sidebar -->
+        <div id="sidebarBackdrop" class="fixed inset-0 bg-black/60 z-30 hidden lg:hidden backdrop-blur-sm transition-opacity duration-300"></div>
 
-            <div class="mt-4">
+        <!-- Mobile header with menu toggle -->
+        <div class="lg:hidden fixed top-0 left-0 right-0 z-20 flex items-center gap-3 px-4 h-14 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800">
+            <button id="sidebarToggle" type="button" class="p-2 -ml-2 rounded-lg hover:bg-slate-800 transition">
+                <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+            <a href="/" class="flex items-center gap-2">
+                <img src="{{ asset('images/logo.png') }}" alt="PromptHub Logo" class="w-7 h-7 rounded-md shadow-sm">
+                <span class="font-bold text-blue-500">PromptHub</span>
+            </a>
+        </div>
 
+        <aside id="sidebar" class="w-64 bg-slate-900 border-r border-slate-800 p-6 overflow-y-auto fixed inset-y-0 left-0 z-40 -translate-x-full lg:relative lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen transition-transform duration-300 ease-in-out">
+
+            <div class="mt-4 lg:mt-0 flex items-center justify-between">
                 <a href="/"
                     class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition duration-200">
 
@@ -31,7 +44,9 @@
                         PromptHub
                     </h1>
                 </a>
-
+                <button id="sidebarClose" type="button" class="lg:hidden p-1 rounded-lg hover:bg-slate-800 transition text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
             </div>
 
 
@@ -184,13 +199,43 @@
 
         </aside>
 
-        <main class="flex-1 p-8">
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 pt-[4.5rem] lg:pt-8 pb-20 lg:pb-8 min-w-0">
 
             @yield('content')
 
         </main>
 
     </div>
+
+    <!-- Mobile Bottom Navigation -->
+    @auth
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 safe-area-bottom">
+        <div class="flex items-center justify-around px-2 py-1">
+            <a href="/dashboard" class="flex flex-col items-center gap-0.5 py-2 px-3 rounded-xl text-slate-400 hover:text-blue-500 transition-colors">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Home</span>
+            </a>
+            <a href="/explore" class="flex flex-col items-center gap-0.5 py-2 px-3 rounded-xl text-slate-400 hover:text-blue-500 transition-colors">
+                <i data-lucide="compass" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Explore</span>
+            </a>
+            <a href="/ai-generator" class="flex flex-col items-center gap-0.5 py-2 px-3 rounded-xl text-slate-400 hover:text-blue-500 transition-colors relative -mt-3">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-violet-500/30 border-4 border-slate-950">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                </div>
+                <span class="text-[10px] font-medium text-violet-400">AI</span>
+            </a>
+            <a href="/favorites" class="flex flex-col items-center gap-0.5 py-2 px-3 rounded-xl text-slate-400 hover:text-blue-500 transition-colors">
+                <i data-lucide="heart" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Favs</span>
+            </a>
+            <a href="/profile" class="flex flex-col items-center gap-0.5 py-2 px-3 rounded-xl text-slate-400 hover:text-blue-500 transition-colors">
+                <i data-lucide="user" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Profile</span>
+            </a>
+        </div>
+    </nav>
+    @endauth
 
     <x-toast />
 
@@ -213,7 +258,7 @@
     }
 @endphp
 
-    <div id="aiFabContainer" class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3"
+    <div id="aiFabContainer" class="fixed bottom-20 lg:bottom-6 right-4 sm:right-6 z-40 flex flex-col items-end gap-3"
          data-last-msg="{{ $lastMsg ? e($lastMsg) : '' }}"
          data-conversations="{{ e($conversationsJson) }}">
         <button id="aiFabBtn" type="button"
@@ -307,6 +352,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var conversationId = null;
     var lastMsg = chatContainer.closest('[data-last-msg]')?.dataset.lastMsg;
+
+    // Sidebar toggle
+    var sidebar = document.getElementById('sidebar');
+    var backdrop = document.getElementById('sidebarBackdrop');
+    var sidebarToggleBtn = document.getElementById('sidebarToggle');
+    var sidebarCloseBtn = document.getElementById('sidebarClose');
+
+    function openSidebar() {
+        if (!sidebar || !backdrop) return;
+        sidebar.classList.remove('-translate-x-full');
+        sidebar.classList.add('translate-x-0');
+        backdrop.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+        if (!sidebar || !backdrop) return;
+        sidebar.classList.add('-translate-x-full');
+        sidebar.classList.remove('translate-x-0');
+        backdrop.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    if (sidebarToggleBtn) sidebarToggleBtn.addEventListener('click', openSidebar);
+    if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
+    if (backdrop) backdrop.addEventListener('click', closeSidebar);
 
     fabBtn.addEventListener('click', function () {
         fabBtn.classList.add('hidden');
@@ -462,9 +533,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function toggleMaximize() {
         isMaximized = !isMaximized;
+        var isDesktop = window.innerWidth >= 1024;
         if (isMaximized) {
             chatContainer.classList.remove('w-[22rem]', 'sm:w-[24rem]');
-            chatContainer.classList.add('fixed', 'top-0', 'right-0', 'bottom-0', 'left-64', 'w-auto', 'h-auto', 'rounded-none');
+            chatContainer.classList.add('fixed', 'top-0', 'right-0', 'bottom-0', isDesktop ? 'left-64' : 'left-0', 'w-auto', 'h-auto', 'rounded-none');
             chatMessages.classList.remove('h-[22rem]', 'sm:h-96');
             chatMessages.classList.add('flex-1', 'min-h-0');
             chatContainer.querySelectorAll('[class*="max-w-xs"]').forEach(function (el) {
@@ -473,7 +545,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             maximizeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 14 4 20 10 20"/><polyline points="20 10 20 4 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
         } else {
-            chatContainer.classList.remove('fixed', 'top-0', 'right-0', 'bottom-0', 'left-64', 'w-auto', 'h-auto', 'rounded-none');
+            chatContainer.classList.remove('fixed', 'top-0', 'right-0', 'bottom-0', 'left-64', 'left-0', 'w-auto', 'h-auto', 'rounded-none');
             chatContainer.classList.add('w-[22rem]', 'sm:w-[24rem]');
             chatMessages.classList.remove('flex-1', 'min-h-0');
             chatMessages.classList.add('h-[22rem]', 'sm:h-96');

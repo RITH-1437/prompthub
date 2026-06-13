@@ -12,7 +12,7 @@ pre {
     background: #0f172a;
     padding: 1rem;
     border-radius: 12px;
-    overflow-x: hidden;
+    overflow-x: auto;
     margin-top: 10px;
 }
 
